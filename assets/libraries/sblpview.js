@@ -12,7 +12,8 @@
 				"delete_selector": "a.delete",
 				"copy_selector": "a.insert-link"
 			};
-
+			
+			var that = this;
 			this.$view = $view;
 			this.settings = $.extend({}, defaults, params);
 			this.sort_order = '';
@@ -21,8 +22,13 @@
 			this.editEntry();
 			this.deleteEntry();
 			this.copyEntry();
-		},
+						
+			setTimeout(function() {
+				$view.codemirror = $('textarea').data('editor');
+			}, 100);
 
+		},
+		
 		/**
 		 * Load the sorting order
 		 */
@@ -127,48 +133,15 @@
 			var view = this;
 
 			this.$view.on('click', this.settings["source_list"] + ' ' + this.settings["copy_selector"], function(e){
-				var $parent = $(this).parents(view.settings["source_list"]);
-				var id = $parent.attr(view.settings["attribute"]);
-				var section = $parent.data('section');
-
-				sblp.current = view.$view.attr('id');
-				
-				var link = $(e.currentTarget).attr('link');
-				var linkTitle = $(e.currentTarget).attr('title');
-				
-				
-				jQuery.fn.extend({
-					insertAtCaret: function(myValue){
-					  return this.each(function(i) {
-					    if (document.selection) {
-					      //For browsers like Internet Explorer
-					      this.focus();
-					      var sel = document.selection.createRange();
-					      sel.text = myValue;
-					      this.focus();
-					    }
-					    else if (this.selectionStart || this.selectionStart == '0') {
-					      //For browsers like Firefox and Webkit based
-					      var startPos = this.selectionStart;
-					      var endPos = this.selectionEnd;
-					      var scrollTop = this.scrollTop;
-					      this.value = this.value.substring(0, startPos)+myValue+this.value.substring(endPos,this.value.length);
-					      this.focus();
-					      this.selectionStart = startPos + myValue.length;
-					      this.selectionEnd = startPos + myValue.length;
-					      this.scrollTop = scrollTop;
-					    } else {
-					      this.value += myValue;
-					      this.focus();
-					    }
-					  });
-					}
-				});
-
-				if ( $('textarea').length > 0) {
-					$('textarea').insertAtCaret('!['+linkTitle+']('+link+' "'+linkTitle+'")');
-				}
-
+				var $parent = $(this).parents(view.settings["source_list"]),
+				id = $parent.attr(view.settings["attribute"]),
+				section = $parent.data('section');
+				sblp.current = view.$view.attr('id'),
+				link = $(e.currentTarget).attr('link'),
+				linkTitle = $(e.currentTarget).attr('title'),
+				textToInsert = '!['+linkTitle+']('+link+' "'+linkTitle+'")',
+				codemirroObj = view.$view.codemirror;
+				codemirroObj.codemirror.replaceSelection('!['+linkTitle+']('+link+' "'+linkTitle+'")');
 			});
 		},
 
@@ -185,13 +158,15 @@
 				var section = $parent.data('section');
 				sblp.current = view.$view.attr('id');
 					
-				var imageThumb = $('div[rel="'+id+'"] a.thumb.insert-link');
-				var link = imageThumb.attr('link');
-				var linkTitle = imageThumb.attr('title');
+				var imageThumb = $('div[rel="'+id+'"] a.thumb.insert-link'),
+				link = imageThumb.attr('link'),
+				linkTitle = imageThumb.attr('title'),
+				stringInTextarea = '!['+linkTitle+']('+link+' "'+linkTitle+'")';
+
+				var codeMirrorObj = view.$view.codemirror.codemirror,
+				existingVal = codeMirrorObj.getValue(),
+				existingVal = existingVal.replace(stringInTextarea, '');
 				
-				var stringInTextarea = '!['+linkTitle+']('+link+' "'+linkTitle+'")';
-				var textAreaVal = $('textarea').val();
-				var newTextAreaVal = textAreaVal.replace(stringInTextarea, '');
 					
 				sblp.$white.show();
 
@@ -204,7 +179,7 @@
 					data['items['+id+']'] = 'yes';
 
 					$.post(Symphony.Context.get('root')+'/symphony/publish/'+section+'/', data, function(){
-						$('textarea').val(newTextAreaVal);
+
 						imageThumb.hide();
 						$('.sblp-view').append('<div id="save-prompt" style="position:fixed;bottom:-1px;width:35%;border-radius:2px 2px 0 0;text-align:center;"><span style="display: block;margin-right: 30px;background-color: #87B75D;color: #FFF;border-radius: 4px 4px 0 0;padding: 3px;font-weight: 600;border: 1px solid #77A250;">Don\'t forget to save these changes &#9662;</span></div>');
 					
@@ -213,6 +188,9 @@
 							$('.sblp-view #save-prompt').fadeOut(100);
 						}, 4000);
 						sblp.$white.hide();
+						
+						// remove links from textarea
+						codeMirrorObj.setValue(existingVal);
 					});
 					
 				}

@@ -75,6 +75,9 @@
 
 			// store sort order
 			$('#contents > form').on('submit', function(){
+				
+				console.log('SPBL:', sblp.views);
+				
 				var data = {};
 				for( var i in sblp.views ){
 					data['id-'+sblp.views[i].$view.data('id')] = sblp.views[i].sort_order;

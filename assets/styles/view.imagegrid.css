@@ -87,6 +87,7 @@ div.sblp-imagegrid div.image.selected div.corner {
 	border-bottom-color:#FFF;
 	border-right-color:#FFF;
 	pointer-events:none;
+	display: none;
 }
 
 /* footer */
