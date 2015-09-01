@@ -158,7 +158,7 @@
 				var section = $parent.data('section');
 				sblp.current = view.$view.attr('id');
 					
-				var imageThumb = $('div[rel="'+id+'"] a.thumb.insert-link'),
+				var imageThumb = $('div[rel="'+id+'"] a.thumb.insert-link').parent(),
 				link = imageThumb.attr('link'),
 				linkTitle = imageThumb.attr('title'),
 				stringInTextarea = '!['+linkTitle+']('+link+' "'+linkTitle+'")';
