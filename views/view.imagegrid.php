@@ -134,7 +134,7 @@
 				$imagegridfooter->appendChild(Widget::Anchor($editbtn_text, 'javascript:void(0)', null, 'edit button sblp-edit'));
 			}
 			if( $field->get('enable_create') == 1 ) {
-				$imagegridfooter->appendChild(Widget::Anchor($createbtn_text, URL.'/symphony/publish/'.$related_sections[0]->get('handle').'/new/', null, 'create button sblp-add'));
+				$imagegridfooter->appendChild(Widget::Anchor($createbtn_text, SYMPHONY_URL.'/publish/'.$related_sections[0]->get('handle').'/new/', null, 'create button sblp-add'));
 			}
 			/* Just to make the button text values accessible to JS*/
 			$imagegridfooter->appendChild(Widget::Input('editbtn_text', $editbtn_text, 'hidden'));

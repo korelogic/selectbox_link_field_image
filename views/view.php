@@ -38,11 +38,11 @@
 				$buttons = new XMLElement('span', __('Create new entry in'), array('class' => 'sblp-buttons'));
 				foreach( $related_sections as $idx => $section ){
 					/** @var $section Section */
-					$create_options[] = array(URL.'/symphony/publish/'.$section->get('handle').'/new/', $idx == 0, $section->get("name"));
+					$create_options[] = array(SYMPHONY_URL.'/publish/'.$section->get('handle').'/new/', $idx == 0, $section->get("name"));
 				}
 
 				$buttons->appendChild(Widget::Select('sblp_section_selector_'.$field->get('id'), $create_options, array('class' => 'sblp-section-selector')));
-				$buttons->appendChild(Widget::Anchor(__("Go"), URL.'/symphony/publish/'.$related_sections[0]->get('handle').'/new/', null, 'create button sblp-add'));
+				$buttons->appendChild(Widget::Anchor(__("Go"), SYMPHONY_URL.'/publish/'.$related_sections[0]->get('handle').'/new/', null, 'create button sblp-add'));
 
 				$wrapper->appendChild($buttons);
 			}

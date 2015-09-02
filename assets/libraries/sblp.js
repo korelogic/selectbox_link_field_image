@@ -7,9 +7,10 @@
 		sort_order: false,
 
 		init: function(){
+						
 			$.ajax({
 				type: "GET",
-				url: Symphony.Context.get('root')+'/symphony/extension/selectbox_link_field_image/',
+				url: window.location.href.split('publish')[0]+'/extension/selectbox_link_field_image/',
 				data: { get: this.getEntryIDFromURL() },
 				dataType: "JSON",
 				success: function(data){
