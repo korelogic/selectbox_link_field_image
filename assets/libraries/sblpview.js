@@ -122,7 +122,7 @@
 				sblp.edit = true; // Set this parameter to prevent the edit-window from closing automaticly:
 				sblp.$white.add(sblp.$popup).show();
 				// Use native Symphony functionality to edit an entry:
-				sblp.$iframe.attr("src", Symphony.Context.get('root')+'/symphony/publish/'+section+'/edit/'+id);
+				sblp.$iframe.attr("src", window.location.href.split('publish')[0]+'/publish/'+section+'/edit/'+id);
 			});
 		},
 		
@@ -178,7 +178,7 @@
 					data['with-selected'] = 'delete';
 					data['items['+id+']'] = 'yes';
 
-					$.post(Symphony.Context.get('root')+'/symphony/publish/'+section+'/', data, function(){
+					$.post(window.location.href.split('publish')[0]+'/publish/'+section+'/', data, function(){
 
 						imageThumb.hide();
 						$('.sblp-view').append('<div id="save-prompt" style="position:fixed;bottom:-1px;width:35%;border-radius:2px 2px 0 0;text-align:center;"><span style="display: block;margin-right: 30px;background-color: #87B75D;color: #FFF;border-radius: 4px 4px 0 0;padding: 3px;font-weight: 600;border: 1px solid #77A250;">Don\'t forget to save these changes &#9662;</span></div>');
